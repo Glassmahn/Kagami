@@ -4,6 +4,7 @@ import { Analytics } from '@vercel/analytics/next'
 import './globals.css'
 import '../styles/mirror.css'
 import { OnchainKitProvider } from '@coinbase/onchainkit'
+import { KagamiProvider } from '@/lib/kagami-provider'
 
 const inter = Inter({ 
   subsets: ["latin"],
@@ -40,13 +41,15 @@ export default function RootLayout({
   return (
     <html lang="en" className="dark bg-background">
       <body className={`${inter.variable} ${jetbrainsMono.variable} font-sans antialiased fractal-bg`}>
-        <OnchainKitProvider
-          chainId={84532}
-          config={{ appearance: { mode: "dark" } }}
-        >
-          {children}
-          {process.env.NODE_ENV === 'production' && <Analytics />}
-        </OnchainKitProvider>
+        <KagamiProvider>
+          <OnchainKitProvider
+            chainId={84532}
+            config={{ appearance: { mode: "dark" } }}
+          >
+            {children}
+            {process.env.NODE_ENV === 'production' && <Analytics />}
+          </OnchainKitProvider>
+        </KagamiProvider>
       </body>
     </html>
   )
