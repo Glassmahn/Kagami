@@ -1,0 +1,47 @@
+[
+  {
+    "inputs": [
+      { "name": "idea", "type": "string" },
+      { "name": "metadataURI", "type": "string" }
+    ],
+    "name": "createReflection",
+    "outputs": [{ "name": "", "type": "uint256" }],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      { "name": "reflectionId", "type": "uint256" }
+    ],
+    "name": "getReflection",
+    "outputs": [
+      { "name": "creator", "type": "address" },
+      { "name": "metadataURI", "type": "string" },
+      { "name": "createdAt", "type": "uint256" },
+      { "name": "childCount", "type": "uint256" },
+      { "name": "totalRevenue", "type": "uint256" }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [{ "name": "", "type": "uint256" }],
+    "name": "reflections",
+    "outputs": [
+      { "name": "creator", "type": "address" },
+      { "name": "metadataURI", "type": "string" },
+      { "name": "createdAt", "type": "uint256" },
+      { "name": "childCount", "type": "uint256" },
+      { "name": "totalRevenue", "type": "uint256" }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [],
+    "name": "totalReflections",
+    "outputs": [{ "name": "", "type": "uint256" }],
+    "stateMutability": "view",
+    "type": "function"
+  }
+]
