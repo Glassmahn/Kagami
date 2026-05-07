@@ -2,8 +2,6 @@
 
 **One idea. Infinite reflections on Base.**
 
-Transform any idea (meme, trend, brand campaign, random thought) into an infinite, self-running onchain ecosystem consisting of token shards, autonomous AI agents, dynamic NFTs, prediction markets, and auto-yield vaults. All revenue automatically flows back to the original creator/agent. Fully permissionless and agent-native.
-
 ## Tech Stack
 
 - **Smart Contracts**: Foundry (Solidity 0.8.26+), OpenZeppelin, Chainlink, Pyth
