@@ -13,3 +13,10 @@ __v0_jsx-dev-runtime.ts
 node_modules
 .next/
 .DS_Store
+
+# Foundry
+out/
+cache/
+broadcast/
+forge-cache/
+contracts/lib/
