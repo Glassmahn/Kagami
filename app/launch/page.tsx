@@ -3,11 +3,48 @@
 import { useState } from 'react'
 import { motion } from 'framer-motion'
 import { Navbar } from '@/components/kagami/navbar'
+import { useWriteContract, useWaitForTransactionReceipt } from 'wagmi'
+import { kagamiCoreAbi } from '@/lib/abis'
+import { KAGAMI_CORE_ADDRESS } from '@/lib/constants'
 
 export default function LaunchPage() {
   const [idea, setIdea] = useState('')
   const [step, setStep] = useState(1)
   const [selectedTypes, setSelectedTypes] = useState<string[]>(['Token', 'Agent'])
+  const [isLaunching, setIsLaunching] = useState(false)
+  
+  const { data: hash, writeContract } = useWriteContract()
+  const { isLoading: isConfirming, isSuccess } = useWaitForTransactionReceipt({ hash })
+  
+  const toggleType = (type: string) => {
+    setSelectedTypes(prev => 
+      prev.includes(type) ? prev.filter(t => t !== type) : [...prev, type]
+    )
+  }
+  
+  const handleLaunch = () => {
+    if (!idea) return
+    setIsLaunching(true)
+    
+    // Encode metadata with idea + selected types
+    const metadata = JSON.stringify({
+      idea,
+      types: selectedTypes,
+      timestamp: Date.now()
+    })
+    
+    writeContract({
+      address: KAGAMI_CORE_ADDRESS,
+      abi: kagamiCoreAbi,
+      functionName: 'createKagami',
+      args: [metadata]
+    })
+  }
+  
+  if (isSuccess) {
+    setStep(3)
+    setIsLaunching(false)
+  }
 
   const toggleType = (type: string) => {
     setSelectedTypes(prev => 
