@@ -1,17 +1,39 @@
 'use client'
 
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { motion } from 'framer-motion'
 import { Navbar } from '@/components/kagami/navbar'
+import { useReadContract } from 'wagmi'
+import { kagamiCoreAbi } from '@/lib/abis'
+import { KAGAMI_CORE_ADDRESS } from '@/lib/constants'
 
-const projects = [
-  { id: 1, name: 'CryptoKitties Revival', status: 'Active', revenue: '$2,340', agents: 3 },
-  { id: 2, name: 'AI Poetry Bot', status: 'Active', revenue: '$890', agents: 1 },
-  { id: 3, name: 'Indie Dev Fund', status: 'Paused', revenue: '$12,450', agents: 5 },
-]
+interface Project {
+  id: number
+  name: string
+  status: 'Active' | 'Paused'
+  revenue: string
+  agents: number
+}
 
 export default function StudioPage() {
   const [activeTab, setActiveTab] = useState<'projects' | 'analytics' | 'settings'>('projects')
+  const [projects, setProjects] = useState<Project[]>([])
+
+  const { data: totalReflections } = useReadContract({
+    address: KAGAMI_CORE_ADDRESS,
+    abi: kagamiCoreAbi,
+    functionName: 'totalReflections',
+  })
+
+  useEffect(() => {
+    if (totalReflections) {
+      // Mock data - replace with actual contract calls
+      setProjects([
+        { id: 1, name: 'My Kagami #1', status: 'Active', revenue: '$1,250', agents: 2 },
+        { id: 2, name: 'AI Bot', status: 'Active', revenue: '$850', agents: 1 },
+      ])
+    }
+  }, [totalReflections])
 
   return (
     <main className="min-h-screen bg-background">
@@ -27,7 +49,7 @@ export default function StudioPage() {
             <h1 className="text-2xl font-light tracking-tight text-foreground">Studio</h1>
             <p className="mt-2 text-sm text-muted-foreground font-light">Advanced creator tools</p>
           </motion.div>
-
+          
           {/* Tabs */}
           <motion.div
             className="mt-10 flex gap-8 border-b border-border/30"
@@ -39,7 +61,7 @@ export default function StudioPage() {
               <button
                 key={tab}
                 onClick={() => setActiveTab(tab)}
-                className={`pb-4 text-xs tracking-widest uppercase transition-all ${
+                className={`pb-4 text-xs tracking-wider uppercase transition-all ${
                   activeTab === tab
                     ? 'text-foreground border-b border-white'
                     : 'text-muted-foreground hover:text-foreground'
@@ -49,7 +71,7 @@ export default function StudioPage() {
               </button>
             ))}
           </motion.div>
-
+          
           {activeTab === 'projects' && (
             <motion.div
               className="mt-10"
@@ -66,7 +88,7 @@ export default function StudioPage() {
                     <div>
                       <div className="flex items-center gap-3">
                         <h3 className="font-light text-foreground">{project.name}</h3>
-                        <span className={`text-[10px] tracking-widest uppercase ${
+                        <span className={`text-[10px] tracking-wider uppercase ${
                           project.status === 'Active' ? 'text-white/60' : 'text-white/30'
                         }`}>
                           {project.status}
@@ -88,13 +110,13 @@ export default function StudioPage() {
                   </div>
                 ))}
               </div>
-
-              <button className="mt-6 w-full rounded-lg border border-dashed border-white/10 py-4 text-xs tracking-widest uppercase text-muted-foreground hover:border-white/30 hover:text-foreground transition-all">
+              
+              <button className="mt-6 w-full rounded-lg border border-dashed border-white/10 py-4 text-xs tracking-wider uppercase text-muted-foreground hover:border-white/30 hover:text-foreground transition-colors">
                 + New Project
               </button>
             </motion.div>
           )}
-
+          
           {activeTab === 'analytics' && (
             <motion.div
               className="mt-10 grid grid-cols-1 md:grid-cols-2 gap-6"
@@ -103,8 +125,8 @@ export default function StudioPage() {
               transition={{ duration: 0.5 }}
             >
               <div className="rounded-lg border border-border/30 p-6">
-                <h3 className="text-xs tracking-widest uppercase text-muted-foreground">Total Revenue</h3>
-                <div className="mt-3 text-3xl font-light text-foreground">$15,680</div>
+                <h3 className="text-xs tracking-wider uppercase text-muted-foreground">Total Revenue</h3>
+                <div className="mt-3 text-3xl font-light text-foreground">$2,100</div>
                 <div className="mt-6 h-24 flex items-end gap-1">
                   {[40, 65, 45, 80, 55, 90, 70, 85, 60, 95, 75, 88].map((h, i) => (
                     <div
@@ -115,10 +137,10 @@ export default function StudioPage() {
                   ))}
                 </div>
               </div>
-
+              
               <div className="rounded-lg border border-border/30 p-6">
-                <h3 className="text-xs tracking-widest uppercase text-muted-foreground">Agent Performance</h3>
-                <div className="mt-3 text-3xl font-light text-foreground">9 Active</div>
+                <h3 className="text-xs tracking-wider uppercase text-muted-foreground">Agent Performance</h3>
+                <div className="mt-3 text-3xl font-light text-foreground">3 Active</div>
                 <div className="mt-6 space-y-4">
                   {[
                     { name: 'Trading Bot', val: 85 },
@@ -139,7 +161,7 @@ export default function StudioPage() {
               </div>
             </motion.div>
           )}
-
+          
           {activeTab === 'settings' && (
             <motion.div
               className="mt-10 max-w-lg space-y-6"
@@ -162,7 +184,7 @@ export default function StudioPage() {
                   ))}
                 </div>
               </div>
-
+              
               <div className="rounded-lg border border-border/30 p-6">
                 <h3 className="text-sm font-light text-foreground">Agent Permissions</h3>
                 <div className="mt-4 space-y-4">
