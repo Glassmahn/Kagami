@@ -1,24 +1,32 @@
 'use client'
 
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { motion } from 'framer-motion'
 import { Navbar } from '@/components/kagami/navbar'
+import { useReadContract } from 'wagmi'
+import { kagamiCoreAbi } from '@/lib/abis'
+import { KAGAMI_CORE_ADDRESS } from '@/lib/constants'
 
 const categories = ['All', 'Trending', 'Memes', 'AI', 'DeFi', 'Gaming', 'Art']
 
+// Mock data - replace with subgraph or indexer in production
 const reflections = [
   { id: 1, name: 'Doge Reborn', creator: '0x1a2...3b4c', category: 'Memes', price: '$0.0042', change: '+156%', volume: '$1.2M' },
   { id: 2, name: 'Neural Agent', creator: '0x5d6...7e8f', category: 'AI', price: '$2.34', change: '+42%', volume: '$890K' },
   { id: 3, name: 'Pixel Lords', creator: '0x9g0...1h2i', category: 'Gaming', price: '$0.89', change: '+28%', volume: '$456K' },
   { id: 4, name: 'Yield Oracle', creator: '0x3j4...5k6l', category: 'DeFi', price: '$12.50', change: '+15%', volume: '$2.1M' },
-  { id: 5, name: 'Abstract Dreams', creator: '0x7m8...9n0o', category: 'Art', price: '$0.056', change: '-8%', volume: '$123K' },
-  { id: 6, name: 'Frog Nation', creator: '0xpq1...2rs3', category: 'Memes', price: '$0.0089', change: '+89%', volume: '$567K' },
 ]
 
 export default function DiscoverPage() {
   const [activeCategory, setActiveCategory] = useState('All')
   const [search, setSearch] = useState('')
-
+  
+  const { data: totalReflections } = useReadContract({
+    address: KAGAMI_CORE_ADDRESS,
+    abi: kagamiCoreAbi,
+    functionName: 'totalReflections',
+  })
+  
   const filtered = reflections.filter(r => 
     (activeCategory === 'All' || r.category === activeCategory) &&
     r.name.toLowerCase().includes(search.toLowerCase())
